@@ -69,4 +69,17 @@ describe 'database' do
       ".exit",
     ])
   end
+
+  it 'prints an error message if id is negative' do
+    script=["insert -1 sdasd foo@bar.com",
+    "select",
+    ".exit",
+    ]
+    result=run_script(script)
+    expect(result).to match_array([
+      "ID must be positive.",
+      "Executed.",
+      ".exit",
+    ])
+  end
 end
