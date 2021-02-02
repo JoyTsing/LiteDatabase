@@ -40,8 +40,8 @@ typedef enum{
 #define COLUMN_EMAIL_SIZE 255
 typedef struct{
     uint32_t id;
-    char username[COLUMN_USERNAME_SIZE];
-    char email[COLUMN_EMAIL_SIZE];
+    char username[COLUMN_USERNAME_SIZE+1];
+    char email[COLUMN_EMAIL_SIZE+1];
 }Row;
 
 typedef struct{
@@ -116,7 +116,6 @@ MetaCommandResult do_meta_command(InputBuffer* input_buffer){
         return META_COMMAND_UNRECOGNIZED_COMMAND;
     }
 }
-//void print_prompt(){printf("db > ");}
 
 PrepareResult prepare_statement(InputBuffer* input_buffer,Statement* statement){
     if(strncmp(input_buffer->buffer,"insert",6)==0){
@@ -142,7 +141,7 @@ void read_input(InputBuffer* input_buffer){
     input_buffer->buffer=(char*)malloc(sizeof(char)*input_buffer->buffer_length);
     input_buffer->buffer=readline("db > ");
     if(input_buffer->buffer==NULL){
-        printf("Error reading input\n");
+        printf("Error reading input.\n");
         exit(EXIT_FAILURE);
     }
     add_history(input_buffer->buffer);
@@ -206,7 +205,7 @@ int main(int argc,char* argv[])
                 case (META_COMMAND_SUCCESS):
                     continue;
                 case (META_COMMAND_UNRECOGNIZED_COMMAND):
-                    printf("Unrecognized command '%s'\n",input_buffer->buffer);
+                    printf("Unrecognized command '%s'.\n",input_buffer->buffer);
                     continue;
             }
         }
@@ -229,7 +228,7 @@ int main(int argc,char* argv[])
             printf("Executed.\n");
             break;
         case(EXECUTE_TABLE_FULL):
-            printf("Error:Table full\n");
+            printf("Error: Table full.\n");
             break;
         }
 
