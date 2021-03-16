@@ -118,7 +118,7 @@ describe 'database' do
       ".constants",
       "Constants:",
       "ROW_SIZE: 293",
-      "COMMON_NODE_HEADER_SIZE:6",
+      "COMMON_NODE_HEADER_SIZE: 6",
       "LEAF_NODE_HEADER_SIZE: 10",
       "LEAF_NODE_CELL_SIZE: 297",
       "LEAF_NODE_SPACE_FOR_CELLS: 4086",
@@ -142,12 +142,28 @@ describe 'database' do
       "Executed.",
       "Tree:",
       "leaf (size 3)",
-      "  - 0 : 3",
-      "  - 1 : 1",
-      "  - 2 : 2",
+      "  - 0 : 1",
+      "  - 1 : 2",
+      "  - 2 : 3",
       ".exit"
     ])
   end
 
+  it 'prints an error message if there is a duplicate id' do
+    script=[
+      "insert 1 user1 person1@example.com",
+      "insert 1 user1 person1@example.com",
+      "select",
+      ".exit",
+    ]
+    result=run_script(script)
+    expect(result).to match_array([
+      "Executed.",
+      "Error: Duplicate key.",
+      "(1, user1, person1@example.com)",
+      "Executed.",
+      ".exit"
+    ])
+  end
 
 end
