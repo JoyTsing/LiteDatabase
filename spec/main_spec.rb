@@ -115,6 +115,7 @@ describe 'database' do
     result=run_script(script)
 
     expect(result).to match_array([
+      ".constants",
       "Constants:",
       "ROW_SIZE: 293",
       "COMMON_NODE_HEADER_SIZE:6",
@@ -122,6 +123,7 @@ describe 'database' do
       "LEAF_NODE_CELL_SIZE: 297",
       "LEAF_NODE_SPACE_FOR_CELLS: 4086",
       "LEAF_NODE_MAX_CELLS: 13",
+      ".exit",
     ])
   end
 
@@ -134,6 +136,7 @@ describe 'database' do
     result = run_script(script)
 
     expect(result).to match_array([
+      ".btree",
       "Executed.",
       "Executed.",
       "Executed.",
@@ -142,6 +145,7 @@ describe 'database' do
       "  - 0 : 3",
       "  - 1 : 1",
       "  - 2 : 2",
+      ".exit"
     ])
   end
 
