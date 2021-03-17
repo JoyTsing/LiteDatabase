@@ -38,8 +38,11 @@ describe 'database' do
     end
     script<<".exit"
     result=run_script(script)
-    expect(result[-2]).to eq('Error: Table full.')
-    end
+    expect(result[-2]).to match_array([
+      "Executed.",
+      "Need to implement splitting internal node",
+    ])
+  end
 
   it 'allows inserting strings that are the maximum length' do
     long_username="a"*32
@@ -141,10 +144,10 @@ describe 'database' do
       "Executed.",
       "Executed.",
       "Tree:",
-      "leaf (size 3)",
-      "  - 0 : 1",
-      "  - 1 : 2",
-      "  - 2 : 3",
+      "- leaf (size 3)",
+      "  - 1",
+      "  - 2",
+      "  - 3",
       ".exit"
     ])
   end
@@ -163,6 +166,41 @@ describe 'database' do
       "(1, user1, person1@example.com)",
       "Executed.",
       ".exit"
+    ])
+  end
+
+  it 'allows printing out the structure of a 3-leaf-node btree' do
+    script=(1..14).map do |i|
+      "insert #{i} user#{i} person#{i}@example.com"
+    end
+    script<<".btree"
+    script<<"insert 15 user15 person15@example.com"
+    script<<".exit"
+    result =run_script(script)
+
+    expect(result[14...(result.length)]).to match_array([
+      ".btree",
+      "Tree:",
+      "- internal (size 1)",
+      "  - leaf (size 7)",
+      "    - 1",
+      "    - 2",
+      "    - 3",
+      "    - 4",
+      "    - 5",
+      "    - 6",
+      "    - 7",
+      "  - key 7",
+      "  - leaf (size 7)",
+      "    - 8",
+      "    - 9",
+      "    - 10",
+      "    - 11",
+      "    - 12",
+      "    - 13",
+      "    - 14",
+      "Need to implement searching an internal node",
+      ".exit",
     ])
   end
 
